@@ -27,10 +27,15 @@ func (s *Service) Create(ctx context.Context, input CreateInput) (*taskdomain.Ta
 		return nil, err
 	}
 
+	// если есть recureType то должны создать строку в recurrence_tasks и создать первую таску
+	// crate будет возвращать первую задачу из правил периодичности
+	// на каждый тип периодичноти - своя логика генерации задач
+
 	model := &taskdomain.Task{
 		Title:       normalized.Title,
 		Description: normalized.Description,
 		Status:      normalized.Status,
+		ScheduledAt: normalized.ScheduledAt,
 	}
 	now := s.now()
 	model.CreatedAt = now
@@ -104,6 +109,14 @@ func validateCreateInput(input CreateInput) (CreateInput, error) {
 
 	if !input.Status.Valid() {
 		return CreateInput{}, fmt.Errorf("%w: invalid status", ErrInvalidInput)
+	}
+
+	if input.RecurType != "" && !input.RecurType.Valid() {
+		return CreateInput{}, fmt.Errorf("%w: invalid recur type", ErrInvalidInput)
+	}
+
+	if !input.IntervalDays.Valid() {
+		return CreateInput{}, fmt.Errorf("%w: invalid interval range", ErrInvalidInput)
 	}
 
 	return input, nil

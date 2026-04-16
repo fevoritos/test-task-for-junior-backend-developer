@@ -153,6 +153,12 @@
       }
     },
     "schemas": {
+      "RecurType": {
+        "type": "string",
+        "description": "Optional recurrence type on create/update (JSON field name is `recure_type`).",
+        "enum": ["daily", "monthly", "specific_dates", "parity"],
+        "example": "daily"
+      },
       "CreateTaskRequest": {
         "type": "object",
         "required": ["title"],
@@ -169,6 +175,22 @@
             "type": "string",
             "enum": ["new", "in_progress", "done"],
             "example": "new"
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the task is scheduled (RFC 3339).",
+            "example": "2026-04-16T12:00:00Z"
+          },
+          "recure_type": {
+            "$ref": "#/components/schemas/RecurType"
+          },
+          "interval_days": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 14,
+            "description": "Interval between occurrences in days; validated up to 14.",
+            "example": 7
           }
         }
       },
@@ -188,6 +210,22 @@
             "type": "string",
             "enum": ["new", "in_progress", "done"],
             "example": "in_progress"
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the task is scheduled (RFC 3339).",
+            "example": "2026-04-16T12:00:00Z"
+          },
+          "recure_type": {
+            "$ref": "#/components/schemas/RecurType"
+          },
+          "interval_days": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 14,
+            "description": "Interval between occurrences in days; validated up to 14.",
+            "example": 7
           }
         }
       },
@@ -204,6 +242,11 @@
             "type": "string",
             "enum": ["new", "in_progress", "done"],
             "example": "new"
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-04-16T12:00:00Z"
           },
           "created_at": {
             "type": "string",

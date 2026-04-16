@@ -28,9 +28,12 @@ func (h *TaskHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	created, err := h.usecase.Create(r.Context(), taskusecase.CreateInput{
-		Title:       req.Title,
-		Description: req.Description,
-		Status:      req.Status,
+		Title:        req.Title,
+		Description:  req.Description,
+		Status:       req.Status,
+		RecurType:    req.RecurType,
+		IntervalDays: req.IntervalDays,
+		ScheduledAt:  req.ScheduledAt,
 	})
 	if err != nil {
 		writeUsecaseError(w, err)
