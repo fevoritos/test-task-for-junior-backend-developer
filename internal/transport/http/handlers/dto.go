@@ -17,6 +17,7 @@ type taskMutationDTO struct {
 
 type taskDTO struct {
 	ID          int64             `json:"id"`
+	RecurID     *int64            `json:"recur_id,omitempty"`
 	Title       string            `json:"title"`
 	Description string            `json:"description"`
 	Status      taskdomain.Status `json:"status"`
@@ -28,6 +29,7 @@ type taskDTO struct {
 func newTaskDTO(task *taskdomain.Task) taskDTO {
 	return taskDTO{
 		ID:          task.ID,
+		RecurID:     task.RecurID,
 		Title:       task.Title,
 		Description: task.Description,
 		Status:      task.Status,

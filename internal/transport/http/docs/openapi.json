@@ -161,6 +161,7 @@
       },
       "CreateTaskRequest": {
         "type": "object",
+        "description": "When `recure_type` is set, a row is created in `recurrence_tasks` and the returned Task includes `recur_id` referencing it.",
         "required": ["title"],
         "properties": {
           "title": {
@@ -197,6 +198,7 @@
       "UpdateTaskRequest": {
         "type": "object",
         "required": ["title", "status"],
+        "description": "Only title, description, and status are applied; other JSON fields are ignored if present.",
         "properties": {
           "title": {
             "type": "string",
@@ -210,22 +212,6 @@
             "type": "string",
             "enum": ["new", "in_progress", "done"],
             "example": "in_progress"
-          },
-          "scheduled_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "When the task is scheduled (RFC 3339).",
-            "example": "2026-04-16T12:00:00Z"
-          },
-          "recure_type": {
-            "$ref": "#/components/schemas/RecurType"
-          },
-          "interval_days": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 14,
-            "description": "Interval between occurrences in days; validated up to 14.",
-            "example": 7
           }
         }
       },
@@ -233,6 +219,13 @@
         "type": "object",
         "properties": {
           "id": { "type": "integer", "format": "int64", "example": 1 },
+          "recur_id": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true,
+            "description": "FK to `recurrence_tasks.id` when the task was created with `recure_type`; omitted or null if the task is not tied to a recurrence template.",
+            "example": 42
+          },
           "title": { "type": "string", "example": "Prepare release" },
           "description": {
             "type": "string",

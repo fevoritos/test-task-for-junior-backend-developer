@@ -5,6 +5,7 @@ import "time"
 type Status string
 type RecurType string
 type IntervalDays uint8
+type ParityEnum string
 
 const (
 	StatusNew        Status = "new"
@@ -19,25 +20,40 @@ const (
 	Parity        RecurType = "parity"
 )
 
+const (
+	Even ParityEnum = "even"
+	Odd  ParityEnum = "odd"
+)
+
 type Task struct {
 	ID          int64     `json:"id"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
+	RecurID     *int64    `json:"recur_id"`
 	Status      Status    `json:"status"`
 	ScheduledAt time.Time `json:"scheduled_at"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-type RecureFields struct {
-	Type     RecurType
-	Interval IntervalDays
-}
-
 type RecurTask struct {
-	Task
+	ID          int64  `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
 
-	IntervalDays IntervalDays `json:"interval_days"`
+	RecurType RecurType `json:"recure_type"`
+
+	IntervalDays  *IntervalDays `json:"interval_days"`
+	DayOfMonth    *uint8        `json:"day_of_month"`
+	SpecificDates *[]time.Time  `json:"specific_dates"`
+	Parity        *ParityEnum   `json:"parity"`
+
+	StartDate         time.Time  `json:"start_date"`
+	EndDate           *time.Time `json:"end_date"`
+	LastGeneratedDate time.Time  `json:"last_generated_date"`
+
+	IsActive  bool      `json:"is_active"`
+	CreatedAt time.Time `jsom:"created_at"`
 }
 
 func (s Status) Valid() bool {

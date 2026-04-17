@@ -41,6 +41,25 @@ func (s *Service) Create(ctx context.Context, input CreateInput) (*taskdomain.Ta
 	model.CreatedAt = now
 	model.UpdatedAt = now
 
+	if normalized.RecurType != "" {
+		interval := normalized.IntervalDays
+		recModel := &taskdomain.RecurTask{
+			Title:             normalized.Title,
+			Description:       normalized.Description,
+			RecurType:         normalized.RecurType,
+			IntervalDays:      &interval,
+			StartDate:         now,
+			CreatedAt:         now,
+			LastGeneratedDate: now,
+		}
+
+		recurTask, err := s.repo.CreateRecurTask(ctx, recModel)
+		if err != nil {
+			return nil, err
+		}
+		model.RecurID = &recurTask.ID
+	}
+
 	created, err := s.repo.Create(ctx, model)
 	if err != nil {
 		return nil, err

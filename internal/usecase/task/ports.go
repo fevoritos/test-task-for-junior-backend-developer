@@ -13,7 +13,7 @@ type Repository interface {
 	Update(ctx context.Context, task *taskdomain.Task) (*taskdomain.Task, error)
 	Delete(ctx context.Context, id int64) error
 	List(ctx context.Context) ([]taskdomain.Task, error)
-	CreateRecureTask(ctx context.Context, rf *taskdomain.RecureFields) (*taskdomain.Task, error)
+	CreateRecurTask(ctx context.Context, recTask *taskdomain.RecurTask) (*taskdomain.RecurTask, error)
 }
 
 type Usecase interface {
