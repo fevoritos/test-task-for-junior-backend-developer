@@ -11,8 +11,9 @@ type taskMutationDTO struct {
 	Description  string                  `json:"description"`
 	Status       taskdomain.Status       `json:"status"`
 	ScheduledAt  time.Time               `json:"scheduled_at"`
-	RecurType    taskdomain.RecurType    `json:"recure_type,omitempty"`
+	RecurType    taskdomain.RecurType    `json:"recur_type,omitempty"`
 	IntervalDays taskdomain.IntervalDays `json:"interval_days,omitempty"`
+	Parity       taskdomain.ParityEnum   `json:"parity,omitempty"`
 }
 
 type taskDTO struct {

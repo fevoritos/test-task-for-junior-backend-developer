@@ -33,6 +33,7 @@ func (h *TaskHandler) Create(w http.ResponseWriter, r *http.Request) {
 		Status:       req.Status,
 		RecurType:    req.RecurType,
 		IntervalDays: req.IntervalDays,
+		Parity:       req.Parity,
 		ScheduledAt:  req.ScheduledAt,
 	})
 	if err != nil {

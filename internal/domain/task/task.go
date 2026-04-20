@@ -85,3 +85,34 @@ func (i IntervalDays) Valid() bool {
 
 	return true
 }
+
+func (pe ParityEnum) Valid() bool {
+	switch pe {
+	case Odd, Even:
+		return true
+	default:
+		return false
+	}
+}
+
+func (pe ParityEnum) ValidateDate(date time.Time) bool {
+	var dayParity ParityEnum
+	dayNumber := date.Day()
+	if dayNumber%2 == 0 {
+		dayParity = Even
+	} else {
+		dayParity = Odd
+	}
+	switch pe {
+	case Odd:
+		if dayParity == Odd {
+			return true
+		}
+	case Even:
+		if dayParity == Even {
+			return true
+		}
+	}
+
+	return false
+}

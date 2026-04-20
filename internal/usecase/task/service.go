@@ -43,12 +43,15 @@ func (s *Service) Create(ctx context.Context, input CreateInput) (*taskdomain.Ta
 
 	if normalized.RecurType != "" {
 		interval := normalized.IntervalDays
+		parity := normalized.Parity
+
 		recModel := &taskdomain.RecurTask{
 			Title:             normalized.Title,
 			Description:       normalized.Description,
 			RecurType:         normalized.RecurType,
 			IntervalDays:      &interval,
-			StartDate:         now,
+			Parity:            &parity,
+			StartDate:         normalized.ScheduledAt,
 			CreatedAt:         now,
 			LastGeneratedDate: now,
 		}
@@ -136,6 +139,13 @@ func validateCreateInput(input CreateInput) (CreateInput, error) {
 
 	if !input.IntervalDays.Valid() {
 		return CreateInput{}, fmt.Errorf("%w: invalid interval range", ErrInvalidInput)
+	}
+
+	if !input.Parity.Valid() {
+		return CreateInput{}, fmt.Errorf("%w: invalid parity", ErrInvalidInput)
+	}
+	if !input.Parity.ValidateDate(input.ScheduledAt) {
+		return CreateInput{}, fmt.Errorf("%w: the date doesn't match with parity", ErrInvalidInput)
 	}
 
 	return input, nil

@@ -30,6 +30,7 @@ type CreateInput struct {
 	Status       taskdomain.Status
 	RecurType    taskdomain.RecurType
 	IntervalDays taskdomain.IntervalDays
+	Parity       taskdomain.ParityEnum
 	ScheduledAt  time.Time
 }
 
