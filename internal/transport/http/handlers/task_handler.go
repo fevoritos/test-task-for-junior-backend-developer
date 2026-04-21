@@ -28,13 +28,15 @@ func (h *TaskHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	created, err := h.usecase.Create(r.Context(), taskusecase.CreateInput{
-		Title:        req.Title,
-		Description:  req.Description,
-		Status:       req.Status,
-		RecurType:    req.RecurType,
-		IntervalDays: req.IntervalDays,
-		Parity:       req.Parity,
-		ScheduledAt:  req.ScheduledAt,
+		Title:         req.Title,
+		Description:   req.Description,
+		Status:        req.Status,
+		RecurType:     req.RecurType,
+		IntervalDays:  req.IntervalDays,
+		DayOfMonth:    req.DayOfMonth,
+		SpecificDates: req.SpecificDates,
+		Parity:        req.Parity,
+		ScheduledAt:   req.ScheduledAt,
 	})
 	if err != nil {
 		writeUsecaseError(w, err)

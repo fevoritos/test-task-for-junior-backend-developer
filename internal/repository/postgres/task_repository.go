@@ -130,13 +130,15 @@ func (r *Repository) CreateRecurTask(ctx context.Context, recTask *taskdomain.Re
 		description, 
 		recur_type, 
 		interval_days,
+		day_of_month,
+		specific_dates,
 		parity,
 		start_date,
 		last_generated_date, 
 		is_active,
 		created_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-		RETURNING id,title, description, recur_type, interval_days, parity,last_generated_date, is_active, created_at
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+		RETURNING id, title, description, recur_type, interval_days, day_of_month, specific_dates, parity, start_date, last_generated_date, is_active, created_at
 	`
 
 	row := r.pool.QueryRow(ctx, query,
@@ -144,6 +146,8 @@ func (r *Repository) CreateRecurTask(ctx context.Context, recTask *taskdomain.Re
 		recTask.Description,
 		recTask.RecurType,
 		recTask.IntervalDays,
+		recTask.DayOfMonth,
+		recTask.SpecificDates,
 		recTask.Parity,
 		recTask.StartDate,
 		recTask.LastGeneratedDate,
@@ -199,7 +203,10 @@ func scanRecurTask(scanner recurTaskScanner) (*taskdomain.RecurTask, error) {
 		&recurTask.Description,
 		&recurTask.RecurType,
 		&recurTask.IntervalDays,
+		&recurTask.DayOfMonth,
+		&recurTask.SpecificDates,
 		&recurTask.Parity,
+		&recurTask.StartDate,
 		&recurTask.LastGeneratedDate,
 		&recurTask.IsActive,
 		&recurTask.CreatedAt,

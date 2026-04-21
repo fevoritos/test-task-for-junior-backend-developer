@@ -41,16 +41,20 @@ func (s *Service) Create(ctx context.Context, input CreateInput) (*taskdomain.Ta
 	model.CreatedAt = now
 	model.UpdatedAt = now
 
-	if normalized.RecurType != "" {
+	if normalized.RecurType != nil {
+
 		interval := normalized.IntervalDays
 		parity := normalized.Parity
+		dayOfMonth := normalized.DayOfMonth
 
 		recModel := &taskdomain.RecurTask{
 			Title:             normalized.Title,
 			Description:       normalized.Description,
-			RecurType:         normalized.RecurType,
-			IntervalDays:      &interval,
-			Parity:            &parity,
+			RecurType:         *normalized.RecurType,
+			IntervalDays:      interval,
+			DayOfMonth:        dayOfMonth,
+			SpecificDates:     normalized.SpecificDates,
+			Parity:            parity,
 			StartDate:         normalized.ScheduledAt,
 			CreatedAt:         now,
 			LastGeneratedDate: now,
@@ -133,19 +137,26 @@ func validateCreateInput(input CreateInput) (CreateInput, error) {
 		return CreateInput{}, fmt.Errorf("%w: invalid status", ErrInvalidInput)
 	}
 
-	if input.RecurType != "" && !input.RecurType.Valid() {
+	if input.RecurType != nil && !input.RecurType.Valid() {
 		return CreateInput{}, fmt.Errorf("%w: invalid recur type", ErrInvalidInput)
 	}
 
-	if !input.IntervalDays.Valid() {
-		return CreateInput{}, fmt.Errorf("%w: invalid interval range", ErrInvalidInput)
-	}
-
-	if !input.Parity.Valid() {
-		return CreateInput{}, fmt.Errorf("%w: invalid parity", ErrInvalidInput)
-	}
-	if !input.Parity.ValidateDate(input.ScheduledAt) {
-		return CreateInput{}, fmt.Errorf("%w: the date doesn't match with parity", ErrInvalidInput)
+	switch *input.RecurType {
+	case taskdomain.DailyType:
+		if !input.IntervalDays.Valid() {
+			return CreateInput{}, fmt.Errorf("%w: invalid interval range", ErrInvalidInput)
+		}
+	case taskdomain.Parity:
+		if !input.Parity.Valid() {
+			return CreateInput{}, fmt.Errorf("%w: invalid parity", ErrInvalidInput)
+		}
+		if !input.Parity.ValidateDate(input.ScheduledAt) {
+			return CreateInput{}, fmt.Errorf("%w: the date doesn't match with parity", ErrInvalidInput)
+		}
+	case taskdomain.MonthlyType:
+		if !input.DayOfMonth.Valid() {
+			return CreateInput{}, fmt.Errorf("%w: invalid day of month", ErrInvalidInput)
+		}
 	}
 
 	return input, nil

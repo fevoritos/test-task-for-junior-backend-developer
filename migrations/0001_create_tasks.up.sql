@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS recurrence_tasks (
 
     interval_days INT,         
     day_of_month INT,           
-    specific_dates DATE[],      
+    specific_dates TEXT[],      
     parity TEXT,                
 
     start_date DATE NOT NULL,   

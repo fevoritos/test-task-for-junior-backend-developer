@@ -7,13 +7,15 @@ import (
 )
 
 type taskMutationDTO struct {
-	Title        string                  `json:"title"`
-	Description  string                  `json:"description"`
-	Status       taskdomain.Status       `json:"status"`
-	ScheduledAt  time.Time               `json:"scheduled_at"`
-	RecurType    taskdomain.RecurType    `json:"recur_type,omitempty"`
-	IntervalDays taskdomain.IntervalDays `json:"interval_days,omitempty"`
-	Parity       taskdomain.ParityEnum   `json:"parity,omitempty"`
+	Title         string                        `json:"title"`
+	Description   string                        `json:"description"`
+	Status        taskdomain.Status             `json:"status"`
+	ScheduledAt   time.Time                     `json:"scheduled_at"`
+	RecurType     *taskdomain.RecurType         `json:"recur_type,omitempty"`
+	IntervalDays  *taskdomain.IntervalDays      `json:"interval_days,omitempty"`
+	SpecificDates *taskdomain.SpecificDatesType `json:"specific_dates,omitempty"`
+	Parity        *taskdomain.ParityEnum        `json:"parity,omitempty"`
+	DayOfMonth    *taskdomain.DayOfMonth        `json:"day_of_month,omitempty"`
 }
 
 type taskDTO struct {

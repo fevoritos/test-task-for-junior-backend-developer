@@ -25,13 +25,15 @@ type Usecase interface {
 }
 
 type CreateInput struct {
-	Title        string
-	Description  string
-	Status       taskdomain.Status
-	RecurType    taskdomain.RecurType
-	IntervalDays taskdomain.IntervalDays
-	Parity       taskdomain.ParityEnum
-	ScheduledAt  time.Time
+	Title         string
+	Description   string
+	Status        taskdomain.Status
+	RecurType     *taskdomain.RecurType
+	IntervalDays  *taskdomain.IntervalDays
+	DayOfMonth    *taskdomain.DayOfMonth
+	SpecificDates *taskdomain.SpecificDatesType
+	Parity        *taskdomain.ParityEnum
+	ScheduledAt   time.Time
 }
 
 type UpdateInput struct {

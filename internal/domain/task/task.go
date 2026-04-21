@@ -6,6 +6,8 @@ type Status string
 type RecurType string
 type IntervalDays uint8
 type ParityEnum string
+type DayOfMonth uint8
+type SpecificDatesType []string
 
 const (
 	StatusNew        Status = "new"
@@ -43,10 +45,10 @@ type RecurTask struct {
 
 	RecurType RecurType `json:"recure_type"`
 
-	IntervalDays  *IntervalDays `json:"interval_days"`
-	DayOfMonth    *uint8        `json:"day_of_month"`
-	SpecificDates *[]time.Time  `json:"specific_dates"`
-	Parity        *ParityEnum   `json:"parity"`
+	IntervalDays  *IntervalDays      `json:"interval_days"`
+	DayOfMonth    *DayOfMonth        `json:"day_of_month"`
+	SpecificDates *SpecificDatesType `json:"specific_dates"`
+	Parity        *ParityEnum        `json:"parity"`
 
 	StartDate         time.Time  `json:"start_date"`
 	EndDate           *time.Time `json:"end_date"`
@@ -79,7 +81,7 @@ func (rt RecurType) Valid() bool {
 }
 
 func (i IntervalDays) Valid() bool {
-	if i > 14 {
+	if i > 14 || i == 0 {
 		return false
 	}
 
@@ -115,4 +117,11 @@ func (pe ParityEnum) ValidateDate(date time.Time) bool {
 	}
 
 	return false
+}
+
+func (dom DayOfMonth) Valid() bool {
+	if dom == 0 || dom > 30 {
+		return false
+	}
+	return true
 }

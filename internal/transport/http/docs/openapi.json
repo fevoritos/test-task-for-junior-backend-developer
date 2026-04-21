@@ -32,7 +32,8 @@
                 }
               }
             }
-          }
+          },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
         }
       },
       "post": {
@@ -55,7 +56,8 @@
               }
             }
           },
-          "400": { "$ref": "#/components/responses/BadRequest" }
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
         }
       }
     },
@@ -80,7 +82,9 @@
               }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
         }
       },
       "put": {
@@ -112,7 +116,8 @@
             }
           },
           "400": { "$ref": "#/components/responses/BadRequest" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
         }
       },
       "delete": {
@@ -128,7 +133,9 @@
         ],
         "responses": {
           "204": { "description": "Deleted" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
         }
       }
     }
@@ -150,18 +157,31 @@
             "schema": { "$ref": "#/components/schemas/Error" }
           }
         }
+      },
+      "InternalServerError": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
       }
     },
     "schemas": {
       "RecurType": {
         "type": "string",
-        "description": "Optional recurrence type on create/update (JSON field name is `recure_type`).",
+        "description": "Recurrence kind for create. When `recur_type` is set, a row is created in `recurrence_tasks` and the returned `Task` includes `recur_id` referencing it.",
         "enum": ["daily", "monthly", "specific_dates", "parity"],
         "example": "daily"
       },
+      "ParityEnum": {
+        "type": "string",
+        "description": "Used with `recur_type` `parity`: must match the calendar day of `scheduled_at` (even or odd day number).",
+        "enum": ["even", "odd"],
+        "example": "even"
+      },
       "CreateTaskRequest": {
         "type": "object",
-        "description": "When `recure_type` is set, a row is created in `recurrence_tasks` and the returned Task includes `recur_id` referencing it.",
         "required": ["title"],
         "properties": {
           "title": {
@@ -175,30 +195,49 @@
           "status": {
             "type": "string",
             "enum": ["new", "in_progress", "done"],
+            "default": "new",
             "example": "new"
           },
           "scheduled_at": {
             "type": "string",
             "format": "date-time",
-            "description": "When the task is scheduled (RFC 3339).",
+            "description": "When the task is scheduled (RFC 3339). Required for parity rules to match the day.",
             "example": "2026-04-16T12:00:00Z"
           },
-          "recure_type": {
+          "recur_type": {
             "$ref": "#/components/schemas/RecurType"
           },
           "interval_days": {
             "type": "integer",
-            "minimum": 0,
+            "minimum": 1,
             "maximum": 14,
-            "description": "Interval between occurrences in days; validated up to 14.",
+            "description": "For `daily`: days between occurrences (1–14).",
             "example": 7
+          },
+          "specific_dates": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Optional list of concrete occurrence times (RFC 3339); may be sent for `specific_dates` recurrence."
+          },
+          "parity": {
+            "$ref": "#/components/schemas/ParityEnum"
+          },
+          "day_of_month": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 30,
+            "description": "For `monthly`: day of month (1–30).",
+            "example": 15
           }
         }
       },
       "UpdateTaskRequest": {
         "type": "object",
         "required": ["title", "status"],
-        "description": "Only title, description, and status are applied; other JSON fields are ignored if present.",
+        "description": "Same JSON shape as create (`taskMutationDTO`); only `title`, `description`, and `status` are applied. Unknown fields are rejected (`DisallowUnknownFields`). Extra recurrence fields are ignored if present.",
         "properties": {
           "title": {
             "type": "string",
@@ -212,6 +251,31 @@
             "type": "string",
             "enum": ["new", "in_progress", "done"],
             "example": "in_progress"
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Decoded but not used on update."
+          },
+          "recur_type": {
+            "$ref": "#/components/schemas/RecurType"
+          },
+          "interval_days": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 14
+          },
+          "specific_dates": {
+            "type": "array",
+            "items": { "type": "string", "format": "date-time" }
+          },
+          "parity": {
+            "$ref": "#/components/schemas/ParityEnum"
+          },
+          "day_of_month": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 30
           }
         }
       },
@@ -223,7 +287,7 @@
             "type": "integer",
             "format": "int64",
             "nullable": true,
-            "description": "FK to `recurrence_tasks.id` when the task was created with `recure_type`; omitted or null if the task is not tied to a recurrence template.",
+            "description": "FK to `recurrence_tasks.id` when the task was created with `recur_type`; omitted if not tied to a recurrence template.",
             "example": 42
           },
           "title": { "type": "string", "example": "Prepare release" },
