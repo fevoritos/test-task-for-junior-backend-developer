@@ -19,7 +19,9 @@
   "paths": {
     "/api/v1/tasks": {
       "get": {
-        "tags": ["Tasks"],
+        "tags": [
+          "Tasks"
+        ],
         "summary": "List tasks",
         "responses": {
           "200": {
@@ -28,22 +30,30 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/Task" }
+                  "items": {
+                    "$ref": "#/components/schemas/Task"
+                  }
                 }
               }
             }
           },
-          "500": { "$ref": "#/components/responses/InternalServerError" }
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
         }
       },
       "post": {
-        "tags": ["Tasks"],
+        "tags": [
+          "Tasks"
+        ],
         "summary": "Create task",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/CreateTaskRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskRequest"
+              }
             }
           }
         },
@@ -52,25 +62,37 @@
             "description": "Created task",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Task" }
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/BadRequest" },
-          "500": { "$ref": "#/components/responses/InternalServerError" }
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
         }
       }
     },
     "/api/v1/tasks/{id}": {
       "get": {
-        "tags": ["Tasks"],
+        "tags": [
+          "Tasks"
+        ],
         "summary": "Get task by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int64", "minimum": 1 }
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            }
           }
         ],
         "responses": {
@@ -78,31 +100,47 @@
             "description": "Task",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Task" }
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/BadRequest" },
-          "404": { "$ref": "#/components/responses/NotFound" },
-          "500": { "$ref": "#/components/responses/InternalServerError" }
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
         }
       },
       "put": {
-        "tags": ["Tasks"],
+        "tags": [
+          "Tasks"
+        ],
         "summary": "Update task",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int64", "minimum": 1 }
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            }
           }
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/UpdateTaskRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTaskRequest"
+              }
             }
           }
         },
@@ -111,31 +149,53 @@
             "description": "Updated task",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Task" }
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/BadRequest" },
-          "404": { "$ref": "#/components/responses/NotFound" },
-          "500": { "$ref": "#/components/responses/InternalServerError" }
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
         }
       },
       "delete": {
-        "tags": ["Tasks"],
+        "tags": [
+          "Tasks"
+        ],
         "summary": "Delete task",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int64", "minimum": 1 }
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            }
           }
         ],
         "responses": {
-          "204": { "description": "Deleted" },
-          "400": { "$ref": "#/components/responses/BadRequest" },
-          "404": { "$ref": "#/components/responses/NotFound" },
-          "500": { "$ref": "#/components/responses/InternalServerError" }
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
         }
       }
     }
@@ -146,7 +206,9 @@
         "description": "Bad request",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/Error" }
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
           }
         }
       },
@@ -154,7 +216,9 @@
         "description": "Resource not found",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/Error" }
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
           }
         }
       },
@@ -162,7 +226,9 @@
         "description": "Internal server error",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/Error" }
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
           }
         }
       }
@@ -171,18 +237,28 @@
       "RecurType": {
         "type": "string",
         "description": "Recurrence kind for create. When `recur_type` is set, a row is created in `recurrence_tasks` and the returned `Task` includes `recur_id` referencing it.",
-        "enum": ["daily", "monthly", "specific_dates", "parity"],
+        "enum": [
+          "daily",
+          "monthly",
+          "specific_dates",
+          "parity"
+        ],
         "example": "daily"
       },
       "ParityEnum": {
         "type": "string",
         "description": "Used with `recur_type` `parity`: must match the calendar day of `scheduled_at` (even or odd day number).",
-        "enum": ["even", "odd"],
+        "enum": [
+          "even",
+          "odd"
+        ],
         "example": "even"
       },
       "CreateTaskRequest": {
         "type": "object",
-        "required": ["title"],
+        "required": [
+          "title"
+        ],
         "properties": {
           "title": {
             "type": "string",
@@ -194,7 +270,11 @@
           },
           "status": {
             "type": "string",
-            "enum": ["new", "in_progress", "done"],
+            "enum": [
+              "new",
+              "in_progress",
+              "done"
+            ],
             "default": "new",
             "example": "new"
           },
@@ -218,7 +298,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "format": "date-time"
+              "example": "30-01"
             },
             "description": "Optional list of concrete occurrence times (RFC 3339); may be sent for `specific_dates` recurrence."
           },
@@ -236,7 +316,10 @@
       },
       "UpdateTaskRequest": {
         "type": "object",
-        "required": ["title", "status"],
+        "required": [
+          "title",
+          "status"
+        ],
         "description": "Same JSON shape as create (`taskMutationDTO`); only `title`, `description`, and `status` are applied. Unknown fields are rejected (`DisallowUnknownFields`). Extra recurrence fields are ignored if present.",
         "properties": {
           "title": {
@@ -249,7 +332,11 @@
           },
           "status": {
             "type": "string",
-            "enum": ["new", "in_progress", "done"],
+            "enum": [
+              "new",
+              "in_progress",
+              "done"
+            ],
             "example": "in_progress"
           },
           "scheduled_at": {
@@ -267,7 +354,10 @@
           },
           "specific_dates": {
             "type": "array",
-            "items": { "type": "string", "format": "date-time" }
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            }
           },
           "parity": {
             "$ref": "#/components/schemas/ParityEnum"
@@ -282,7 +372,11 @@
       "Task": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer", "format": "int64", "example": 1 },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
           "recur_id": {
             "type": "integer",
             "format": "int64",
@@ -290,14 +384,21 @@
             "description": "FK to `recurrence_tasks.id` when the task was created with `recur_type`; omitted if not tied to a recurrence template.",
             "example": 42
           },
-          "title": { "type": "string", "example": "Prepare release" },
+          "title": {
+            "type": "string",
+            "example": "Prepare release"
+          },
           "description": {
             "type": "string",
             "example": "Collect release notes and check migrations"
           },
           "status": {
             "type": "string",
-            "enum": ["new", "in_progress", "done"],
+            "enum": [
+              "new",
+              "in_progress",
+              "done"
+            ],
             "example": "new"
           },
           "scheduled_at": {
@@ -320,7 +421,10 @@
       "Error": {
         "type": "object",
         "properties": {
-          "error": { "type": "string", "example": "task not found" }
+          "error": {
+            "type": "string",
+            "example": "task not found"
+          }
         }
       }
     }

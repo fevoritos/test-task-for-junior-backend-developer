@@ -1,13 +1,17 @@
 package task
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type Status string
 type RecurType string
 type IntervalDays uint8
 type ParityEnum string
 type DayOfMonth uint8
-type SpecificDatesType []string
+type SpecificDate string
+type SpecificDatesType []SpecificDate
 
 const (
 	StatusNew        Status = "new"
@@ -123,5 +127,20 @@ func (dom DayOfMonth) Valid() bool {
 	if dom == 0 || dom > 30 {
 		return false
 	}
+	return true
+}
+
+// DD-MM is valid format
+func (sd SpecificDate) Valid() bool {
+	if len(sd) != 5 {
+		return false
+	}
+
+	_, err := time.Parse("02-01-2006", string(sd)+"-2000")
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+
 	return true
 }

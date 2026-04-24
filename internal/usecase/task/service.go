@@ -43,18 +43,14 @@ func (s *Service) Create(ctx context.Context, input CreateInput) (*taskdomain.Ta
 
 	if normalized.RecurType != nil {
 
-		interval := normalized.IntervalDays
-		parity := normalized.Parity
-		dayOfMonth := normalized.DayOfMonth
-
 		recModel := &taskdomain.RecurTask{
 			Title:             normalized.Title,
 			Description:       normalized.Description,
 			RecurType:         *normalized.RecurType,
-			IntervalDays:      interval,
-			DayOfMonth:        dayOfMonth,
+			IntervalDays:      normalized.IntervalDays,
+			DayOfMonth:        normalized.DayOfMonth,
 			SpecificDates:     normalized.SpecificDates,
-			Parity:            parity,
+			Parity:            normalized.Parity,
 			StartDate:         normalized.ScheduledAt,
 			CreatedAt:         now,
 			LastGeneratedDate: now,
@@ -124,6 +120,7 @@ func (s *Service) List(ctx context.Context) ([]taskdomain.Task, error) {
 func validateCreateInput(input CreateInput) (CreateInput, error) {
 	input.Title = strings.TrimSpace(input.Title)
 	input.Description = strings.TrimSpace(input.Description)
+	nulOtherRecurRows(*input.RecurType, &input)
 
 	if input.Title == "" {
 		return CreateInput{}, fmt.Errorf("%w: title is required", ErrInvalidInput)
@@ -157,6 +154,12 @@ func validateCreateInput(input CreateInput) (CreateInput, error) {
 		if !input.DayOfMonth.Valid() {
 			return CreateInput{}, fmt.Errorf("%w: invalid day of month", ErrInvalidInput)
 		}
+	case taskdomain.SpecificDates:
+		for _, date := range *input.SpecificDates {
+			if !date.Valid() {
+				return CreateInput{}, fmt.Errorf("%w: ivalid date format. Valid is DD-MM", ErrInvalidInput)
+			}
+		}
 	}
 
 	return input, nil
@@ -175,4 +178,25 @@ func validateUpdateInput(input UpdateInput) (UpdateInput, error) {
 	}
 
 	return input, nil
+}
+
+func nulOtherRecurRows(rt taskdomain.RecurType, input *CreateInput) {
+	switch rt {
+	case taskdomain.DailyType:
+		input.DayOfMonth = nil
+		input.SpecificDates = nil
+		input.Parity = nil
+	case taskdomain.MonthlyType:
+		input.SpecificDates = nil
+		input.IntervalDays = nil
+		input.Parity = nil
+	case taskdomain.SpecificDates:
+		input.DayOfMonth = nil
+		input.IntervalDays = nil
+		input.Parity = nil
+	case taskdomain.Parity:
+		input.DayOfMonth = nil
+		input.IntervalDays = nil
+		input.SpecificDates = nil
+	}
 }
