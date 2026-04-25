@@ -15,7 +15,9 @@ import (
 	transporthttp "example.com/taskservice/internal/transport/http"
 	swaggerdocs "example.com/taskservice/internal/transport/http/docs"
 	httphandlers "example.com/taskservice/internal/transport/http/handlers"
+	"example.com/taskservice/internal/usecase/generator"
 	"example.com/taskservice/internal/usecase/task"
+	"github.com/go-co-op/gocron/v2"
 )
 
 func main() {
@@ -46,6 +48,25 @@ func main() {
 		Handler:           router,
 		ReadHeaderTimeout: 5 * time.Second,
 	}
+
+	gen := generator.NewGenerator(taskRepo, taskRepo)
+
+	s, err := gocron.NewScheduler()
+	if err != nil {
+		panic("Scheduler run fail")
+	}
+
+	j, err := s.NewJob(
+		gocron.DurationJob(
+			10*time.Second,
+		),
+		gocron.NewTask(func() { gen.Generate(context.Background()) }),
+	)
+	if err != nil {
+		panic("Scheduler run fail")
+	}
+	fmt.Println(j.ID())
+	s.Start()
 
 	go func() {
 		<-ctx.Done()

@@ -51,7 +51,7 @@ func (s *Service) Create(ctx context.Context, input CreateInput) (*taskdomain.Ta
 			DayOfMonth:        normalized.DayOfMonth,
 			SpecificDates:     normalized.SpecificDates,
 			Parity:            normalized.Parity,
-			StartDate:         normalized.ScheduledAt,
+			ScheduledAt:       normalized.ScheduledAt,
 			CreatedAt:         now,
 			LastGeneratedDate: now,
 		}

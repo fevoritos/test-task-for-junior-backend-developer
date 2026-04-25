@@ -10,8 +10,7 @@ CREATE TABLE IF NOT EXISTS recurrence_tasks (
     specific_dates TEXT[],      
     parity TEXT,                
 
-    start_date DATE NOT NULL,   
-    end_date DATE,              
+    scheduled_at DATE,             
     last_generated_date DATE,   
     
     is_active BOOLEAN DEFAULT TRUE,
@@ -26,7 +25,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     description TEXT NOT NULL DEFAULT '',
     status TEXT NOT NULL DEFAULT 'todo', 
     
-    scheduled_at TIMESTAMPTZ NOT NULL, 
+    scheduled_at DATE, 
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

@@ -54,12 +54,16 @@ type RecurTask struct {
 	SpecificDates *SpecificDatesType `json:"specific_dates"`
 	Parity        *ParityEnum        `json:"parity"`
 
-	StartDate         time.Time  `json:"start_date"`
-	EndDate           *time.Time `json:"end_date"`
-	LastGeneratedDate time.Time  `json:"last_generated_date"`
+	ScheduledAt       time.Time `json:"scheduled_at"`
+	LastGeneratedDate time.Time `json:"last_generated_date"`
 
 	IsActive  bool      `json:"is_active"`
 	CreatedAt time.Time `jsom:"created_at"`
+}
+
+type UpdateRecurTask struct {
+	ScheduledAt       *time.Time `json:"scheduled_at"`
+	LastGeneratedDate *time.Time `json:"last_generated_date"`
 }
 
 func (s Status) Valid() bool {
