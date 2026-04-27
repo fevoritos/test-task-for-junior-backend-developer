@@ -12,7 +12,7 @@ type TaskRepo interface {
 }
 
 type RecurRepo interface {
-	GetByDateRecurTask(ctx context.Context, date time.Time) ([]taskdomain.RecurTask, error)
+	GetByScheduledDateRecurTask(ctx context.Context, date time.Time) ([]taskdomain.RecurTask, error)
 	CreateRecurTask(ctx context.Context, recTask *taskdomain.RecurTask) (*taskdomain.RecurTask, error)
 	UpdateRecurTask(ctx context.Context, id int64, task taskdomain.RecurTask) (*taskdomain.RecurTask, error)
 }

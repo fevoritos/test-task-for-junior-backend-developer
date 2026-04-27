@@ -31,3 +31,4 @@ CREATE TABLE IF NOT EXISTS tasks (
 );
 
 CREATE INDEX idx_tasks_schedule_at ON tasks(scheduled_at);
+ALTER TABLE tasks ADD CONSTRAINT unique_recur_date UNIQUE (recur_id, scheduled_at);

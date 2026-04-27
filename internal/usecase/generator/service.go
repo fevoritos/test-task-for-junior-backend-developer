@@ -26,7 +26,7 @@ func (scheduler *TaskGenerator) Generate(ctx context.Context) {
 	fmt.Println("generating...")
 	now := scheduler.now().AddDate(0, 0, 1)
 
-	list, err := scheduler.recurRepo.GetByDateRecurTask(ctx, now)
+	list, err := scheduler.recurRepo.GetByScheduledDateRecurTask(ctx, now)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

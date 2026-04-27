@@ -164,7 +164,7 @@ func (r *Repository) CreateRecurTask(ctx context.Context, recTask *taskdomain.Re
 	return created, nil
 }
 
-func (r *Repository) GetByDateRecurTask(ctx context.Context, date time.Time) ([]taskdomain.RecurTask, error) {
+func (r *Repository) GetByScheduledDateRecurTask(ctx context.Context, date time.Time) ([]taskdomain.RecurTask, error) {
 	const query = `
 	SELECT * FROM recurrence_tasks
 	WHERE scheduled_at = $1;
